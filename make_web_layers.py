@@ -70,7 +70,7 @@ LAYER_DEFS = {
     "tcc":                ("Total cloud cover, mean",  "ERA5",   "",       "Blues",    False),
     "d2m":                ("2 m dewpoint, mean",       "ERA5",   "K",      "magma",    False),
     "blh":                ("Boundary-layer height, mean", "ERA5", "m",     "viridis",  False),
-    "ssrd":               ("Surface solar radiation, mean", "ERA5", "J/m²", "inferno", False),
+    "ssrd":               ("Surface solar radiation, mean", "ERA5", "W/m²", "inferno", False),
 }
 
 

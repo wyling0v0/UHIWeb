@@ -159,7 +159,7 @@
   "ssrd": {
    "label": "Surface solar radiation, mean",
    "group": "ERA5",
-   "units": "J/m\u00b2",
+   "units": "W/m\u00b2",
    "cmap": "inferno",
    "diverging": false
   }
@@ -302,6 +302,41 @@
      "min": -4.845,
      "max": 4.845,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "berlin/wind_speed.png",
+     "values": "berlin/wind_speed.json",
+     "min": 1.117,
+     "max": 1.187,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "berlin/tcc.png",
+     "values": "berlin/tcc.json",
+     "min": 0.664,
+     "max": 0.67,
+     "units": ""
+    },
+    "d2m": {
+     "png": "berlin/d2m.png",
+     "values": "berlin/d2m.json",
+     "min": 279.009,
+     "max": 279.174,
+     "units": "K"
+    },
+    "blh": {
+     "png": "berlin/blh.png",
+     "values": "berlin/blh.json",
+     "min": 606.552,
+     "max": 631.446,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "berlin/ssrd.png",
+     "values": "berlin/ssrd.json",
+     "min": 125.317,
+     "max": 127.434,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -442,6 +477,41 @@
      "min": -5.859,
      "max": 5.859,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "hamburg/wind_speed.png",
+     "values": "hamburg/wind_speed.json",
+     "min": 1.386,
+     "max": 1.447,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "hamburg/tcc.png",
+     "values": "hamburg/tcc.json",
+     "min": 0.688,
+     "max": 0.692,
+     "units": ""
+    },
+    "d2m": {
+     "png": "hamburg/d2m.png",
+     "values": "hamburg/d2m.json",
+     "min": 279.452,
+     "max": 279.824,
+     "units": "K"
+    },
+    "blh": {
+     "png": "hamburg/blh.png",
+     "values": "hamburg/blh.json",
+     "min": 616.908,
+     "max": 631.231,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "hamburg/ssrd.png",
+     "values": "hamburg/ssrd.json",
+     "min": 121.055,
+     "max": 122.116,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -582,6 +652,41 @@
      "min": -2.941,
      "max": 2.941,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "munich/wind_speed.png",
+     "values": "munich/wind_speed.json",
+     "min": 0.716,
+     "max": 0.942,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "munich/tcc.png",
+     "values": "munich/tcc.json",
+     "min": 0.632,
+     "max": 0.648,
+     "units": ""
+    },
+    "d2m": {
+     "png": "munich/d2m.png",
+     "values": "munich/d2m.json",
+     "min": 278.262,
+     "max": 278.985,
+     "units": "K"
+    },
+    "blh": {
+     "png": "munich/blh.png",
+     "values": "munich/blh.json",
+     "min": 411.668,
+     "max": 531.382,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "munich/ssrd.png",
+     "values": "munich/ssrd.json",
+     "min": 141.26,
+     "max": 142.387,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -722,6 +827,41 @@
      "min": -9.215,
      "max": 9.215,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "cologne/wind_speed.png",
+     "values": "cologne/wind_speed.json",
+     "min": 1.096,
+     "max": 1.488,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "cologne/tcc.png",
+     "values": "cologne/tcc.json",
+     "min": 0.655,
+     "max": 0.673,
+     "units": ""
+    },
+    "d2m": {
+     "png": "cologne/d2m.png",
+     "values": "cologne/d2m.json",
+     "min": 279.781,
+     "max": 280.101,
+     "units": "K"
+    },
+    "blh": {
+     "png": "cologne/blh.png",
+     "values": "cologne/blh.json",
+     "min": 575.065,
+     "max": 589.099,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "cologne/ssrd.png",
+     "values": "cologne/ssrd.json",
+     "min": 127.754,
+     "max": 130.059,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -862,6 +1002,41 @@
      "min": -5.634,
      "max": 5.634,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "dortmund/wind_speed.png",
+     "values": "dortmund/wind_speed.json",
+     "min": 1.553,
+     "max": 1.699,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "dortmund/tcc.png",
+     "values": "dortmund/tcc.json",
+     "min": 0.678,
+     "max": 0.683,
+     "units": ""
+    },
+    "d2m": {
+     "png": "dortmund/d2m.png",
+     "values": "dortmund/d2m.json",
+     "min": 279.682,
+     "max": 280.016,
+     "units": "K"
+    },
+    "blh": {
+     "png": "dortmund/blh.png",
+     "values": "dortmund/blh.json",
+     "min": 587.315,
+     "max": 608.149,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "dortmund/ssrd.png",
+     "values": "dortmund/ssrd.json",
+     "min": 125.469,
+     "max": 126.095,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1002,6 +1177,41 @@
      "min": -7.052,
      "max": 7.052,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "dusseldorf/wind_speed.png",
+     "values": "dusseldorf/wind_speed.json",
+     "min": 1.239,
+     "max": 1.375,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "dusseldorf/tcc.png",
+     "values": "dusseldorf/tcc.json",
+     "min": 0.666,
+     "max": 0.672,
+     "units": ""
+    },
+    "d2m": {
+     "png": "dusseldorf/d2m.png",
+     "values": "dusseldorf/d2m.json",
+     "min": 280.042,
+     "max": 280.319,
+     "units": "K"
+    },
+    "blh": {
+     "png": "dusseldorf/blh.png",
+     "values": "dusseldorf/blh.json",
+     "min": 586.949,
+     "max": 595.126,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "dusseldorf/ssrd.png",
+     "values": "dusseldorf/ssrd.json",
+     "min": 126.909,
+     "max": 128.509,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1142,6 +1352,41 @@
      "min": -6.188,
      "max": 6.188,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "frankfurt/wind_speed.png",
+     "values": "frankfurt/wind_speed.json",
+     "min": 0.764,
+     "max": 0.846,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "frankfurt/tcc.png",
+     "values": "frankfurt/tcc.json",
+     "min": 0.652,
+     "max": 0.672,
+     "units": ""
+    },
+    "d2m": {
+     "png": "frankfurt/d2m.png",
+     "values": "frankfurt/d2m.json",
+     "min": 279.128,
+     "max": 279.398,
+     "units": "K"
+    },
+    "blh": {
+     "png": "frankfurt/blh.png",
+     "values": "frankfurt/blh.json",
+     "min": 562.99,
+     "max": 573.199,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "frankfurt/ssrd.png",
+     "values": "frankfurt/ssrd.json",
+     "min": 132.185,
+     "max": 134.487,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1282,6 +1527,41 @@
      "min": -6.524,
      "max": 6.524,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "stuttgart/wind_speed.png",
+     "values": "stuttgart/wind_speed.json",
+     "min": 0.807,
+     "max": 1.084,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "stuttgart/tcc.png",
+     "values": "stuttgart/tcc.json",
+     "min": 0.636,
+     "max": 0.644,
+     "units": ""
+    },
+    "d2m": {
+     "png": "stuttgart/d2m.png",
+     "values": "stuttgart/d2m.json",
+     "min": 278.648,
+     "max": 279.256,
+     "units": "K"
+    },
+    "blh": {
+     "png": "stuttgart/blh.png",
+     "values": "stuttgart/blh.json",
+     "min": 518.369,
+     "max": 538.176,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "stuttgart/ssrd.png",
+     "values": "stuttgart/ssrd.json",
+     "min": 139.305,
+     "max": 141.147,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1401,6 +1681,41 @@
      "min": -10.192,
      "max": 10.192,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "warsaw/wind_speed.png",
+     "values": "warsaw/wind_speed.json",
+     "min": 0.875,
+     "max": 1.044,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "warsaw/tcc.png",
+     "values": "warsaw/tcc.json",
+     "min": 0.656,
+     "max": 0.664,
+     "units": ""
+    },
+    "d2m": {
+     "png": "warsaw/d2m.png",
+     "values": "warsaw/d2m.json",
+     "min": 278.297,
+     "max": 278.544,
+     "units": "K"
+    },
+    "blh": {
+     "png": "warsaw/blh.png",
+     "values": "warsaw/blh.json",
+     "min": 584.273,
+     "max": 599.717,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "warsaw/ssrd.png",
+     "values": "warsaw/ssrd.json",
+     "min": 126.658,
+     "max": 129.071,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1520,6 +1835,41 @@
      "min": -11.412,
      "max": 11.412,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "bucharest/wind_speed.png",
+     "values": "bucharest/wind_speed.json",
+     "min": 0.318,
+     "max": 0.629,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "bucharest/tcc.png",
+     "values": "bucharest/tcc.json",
+     "min": 0.523,
+     "max": 0.537,
+     "units": ""
+    },
+    "d2m": {
+     "png": "bucharest/d2m.png",
+     "values": "bucharest/d2m.json",
+     "min": 279.878,
+     "max": 280.624,
+     "units": "K"
+    },
+    "blh": {
+     "png": "bucharest/blh.png",
+     "values": "bucharest/blh.json",
+     "min": 449.215,
+     "max": 502.056,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "bucharest/ssrd.png",
+     "values": "bucharest/ssrd.json",
+     "min": 158.749,
+     "max": 163.618,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1639,6 +1989,41 @@
      "min": -18.012,
      "max": 18.012,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "sao_paulo/wind_speed.png",
+     "values": "sao_paulo/wind_speed.json",
+     "min": 0.338,
+     "max": 1.089,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "sao_paulo/tcc.png",
+     "values": "sao_paulo/tcc.json",
+     "min": 0.596,
+     "max": 0.709,
+     "units": ""
+    },
+    "d2m": {
+     "png": "sao_paulo/d2m.png",
+     "values": "sao_paulo/d2m.json",
+     "min": 288.666,
+     "max": 292.258,
+     "units": "K"
+    },
+    "blh": {
+     "png": "sao_paulo/blh.png",
+     "values": "sao_paulo/blh.json",
+     "min": 352.198,
+     "max": 546.834,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "sao_paulo/ssrd.png",
+     "values": "sao_paulo/ssrd.json",
+     "min": 189.113,
+     "max": 207.845,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1758,6 +2143,41 @@
      "min": -24.334,
      "max": 24.334,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "buenos_aires/wind_speed.png",
+     "values": "buenos_aires/wind_speed.json",
+     "min": 0.599,
+     "max": 1.369,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "buenos_aires/tcc.png",
+     "values": "buenos_aires/tcc.json",
+     "min": 0.452,
+     "max": 0.465,
+     "units": ""
+    },
+    "d2m": {
+     "png": "buenos_aires/d2m.png",
+     "values": "buenos_aires/d2m.json",
+     "min": 284.477,
+     "max": 286.411,
+     "units": "K"
+    },
+    "blh": {
+     "png": "buenos_aires/blh.png",
+     "values": "buenos_aires/blh.json",
+     "min": 510.088,
+     "max": 549.95,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "buenos_aires/ssrd.png",
+     "values": "buenos_aires/ssrd.json",
+     "min": 203.152,
+     "max": 205.885,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1877,6 +2297,41 @@
      "min": -16.827,
      "max": 16.827,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "johannesburg/wind_speed.png",
+     "values": "johannesburg/wind_speed.json",
+     "min": 0.597,
+     "max": 1.232,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "johannesburg/tcc.png",
+     "values": "johannesburg/tcc.json",
+     "min": 0.318,
+     "max": 0.341,
+     "units": ""
+    },
+    "d2m": {
+     "png": "johannesburg/d2m.png",
+     "values": "johannesburg/d2m.json",
+     "min": 279.537,
+     "max": 280.827,
+     "units": "K"
+    },
+    "blh": {
+     "png": "johannesburg/blh.png",
+     "values": "johannesburg/blh.json",
+     "min": 622.705,
+     "max": 685.75,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "johannesburg/ssrd.png",
+     "values": "johannesburg/ssrd.json",
+     "min": 231.274,
+     "max": 234.372,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -1996,6 +2451,41 @@
      "min": -7.564,
      "max": 7.564,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "lagos/wind_speed.png",
+     "values": "lagos/wind_speed.json",
+     "min": 1.486,
+     "max": 4.448,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "lagos/tcc.png",
+     "values": "lagos/tcc.json",
+     "min": 0.662,
+     "max": 0.718,
+     "units": ""
+    },
+    "d2m": {
+     "png": "lagos/d2m.png",
+     "values": "lagos/d2m.json",
+     "min": 296.648,
+     "max": 297.44,
+     "units": "K"
+    },
+    "blh": {
+     "png": "lagos/blh.png",
+     "values": "lagos/blh.json",
+     "min": 455.311,
+     "max": 518.198,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "lagos/ssrd.png",
+     "values": "lagos/ssrd.json",
+     "min": 192.391,
+     "max": 207.649,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -2115,6 +2605,41 @@
      "min": -52.671,
      "max": 52.671,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "cairo/wind_speed.png",
+     "values": "cairo/wind_speed.json",
+     "min": 1.263,
+     "max": 2.598,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "cairo/tcc.png",
+     "values": "cairo/tcc.json",
+     "min": 0.17,
+     "max": 0.212,
+     "units": ""
+    },
+    "d2m": {
+     "png": "cairo/d2m.png",
+     "values": "cairo/d2m.json",
+     "min": 283.444,
+     "max": 285.909,
+     "units": "K"
+    },
+    "blh": {
+     "png": "cairo/blh.png",
+     "values": "cairo/blh.json",
+     "min": 693.035,
+     "max": 733.005,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "cairo/ssrd.png",
+     "values": "cairo/ssrd.json",
+     "min": 238.106,
+     "max": 251.545,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -2234,6 +2759,41 @@
      "min": -82.677,
      "max": 82.677,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "riyadh/wind_speed.png",
+     "values": "riyadh/wind_speed.json",
+     "min": 0.634,
+     "max": 1.067,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "riyadh/tcc.png",
+     "values": "riyadh/tcc.json",
+     "min": 0.192,
+     "max": 0.205,
+     "units": ""
+    },
+    "d2m": {
+     "png": "riyadh/d2m.png",
+     "values": "riyadh/d2m.json",
+     "min": 276.099,
+     "max": 276.383,
+     "units": "K"
+    },
+    "blh": {
+     "png": "riyadh/blh.png",
+     "values": "riyadh/blh.json",
+     "min": 810.579,
+     "max": 887.299,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "riyadh/ssrd.png",
+     "values": "riyadh/ssrd.json",
+     "min": 258.569,
+     "max": 260.115,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -2339,6 +2899,41 @@
      "min": -20.164,
      "max": 20.164,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "tehran/wind_speed.png",
+     "values": "tehran/wind_speed.json",
+     "min": 0.062,
+     "max": 0.718,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "tehran/tcc.png",
+     "values": "tehran/tcc.json",
+     "min": 0.242,
+     "max": 0.378,
+     "units": ""
+    },
+    "d2m": {
+     "png": "tehran/d2m.png",
+     "values": "tehran/d2m.json",
+     "min": 269.349,
+     "max": 274.6,
+     "units": "K"
+    },
+    "blh": {
+     "png": "tehran/blh.png",
+     "values": "tehran/blh.json",
+     "min": 497.317,
+     "max": 693.194,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "tehran/ssrd.png",
+     "values": "tehran/ssrd.json",
+     "min": 223.29,
+     "max": 232.646,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -2444,6 +3039,41 @@
      "min": -19.858,
      "max": 19.858,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "khartoum/wind_speed.png",
+     "values": "khartoum/wind_speed.json",
+     "min": 1.41,
+     "max": 1.964,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "khartoum/tcc.png",
+     "values": "khartoum/tcc.json",
+     "min": 0.234,
+     "max": 0.271,
+     "units": ""
+    },
+    "d2m": {
+     "png": "khartoum/d2m.png",
+     "values": "khartoum/d2m.json",
+     "min": 279.055,
+     "max": 280.581,
+     "units": "K"
+    },
+    "blh": {
+     "png": "khartoum/blh.png",
+     "values": "khartoum/blh.json",
+     "min": 812.341,
+     "max": 924.523,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "khartoum/ssrd.png",
+     "values": "khartoum/ssrd.json",
+     "min": 266.794,
+     "max": 273.959,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -2549,6 +3179,41 @@
      "min": -14.795,
      "max": 14.795,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "casablanca/wind_speed.png",
+     "values": "casablanca/wind_speed.json",
+     "min": 0.852,
+     "max": 2.246,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "casablanca/tcc.png",
+     "values": "casablanca/tcc.json",
+     "min": 0.391,
+     "max": 0.42,
+     "units": ""
+    },
+    "d2m": {
+     "png": "casablanca/d2m.png",
+     "values": "casablanca/d2m.json",
+     "min": 285.328,
+     "max": 288.7,
+     "units": "K"
+    },
+    "blh": {
+     "png": "casablanca/blh.png",
+     "values": "casablanca/blh.json",
+     "min": 389.253,
+     "max": 488.429,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "casablanca/ssrd.png",
+     "values": "casablanca/ssrd.json",
+     "min": 220.401,
+     "max": 224.75,
+     "units": "J/m\u00b2"
     }
    }
   },
@@ -2654,6 +3319,41 @@
      "min": -25.524,
      "max": 25.524,
      "units": "\u0394radiance"
+    },
+    "wind_speed": {
+     "png": "istanbul/wind_speed.png",
+     "values": "istanbul/wind_speed.json",
+     "min": 1.533,
+     "max": 2.724,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "istanbul/tcc.png",
+     "values": "istanbul/tcc.json",
+     "min": 0.446,
+     "max": 0.495,
+     "units": ""
+    },
+    "d2m": {
+     "png": "istanbul/d2m.png",
+     "values": "istanbul/d2m.json",
+     "min": 283.922,
+     "max": 284.868,
+     "units": "K"
+    },
+    "blh": {
+     "png": "istanbul/blh.png",
+     "values": "istanbul/blh.json",
+     "min": 502.565,
+     "max": 590.884,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "istanbul/ssrd.png",
+     "values": "istanbul/ssrd.json",
+     "min": 174.617,
+     "max": 180.711,
+     "units": "J/m\u00b2"
     }
    }
   }
