@@ -1,0 +1,519 @@
+{
+ "demo": true,
+ "generated": "2026-08-18",
+ "layer_defs": {
+  "lst_uhi_mean": {
+   "label": "LST-UHI mean",
+   "group": "UHI",
+   "units": "K",
+   "cmap": "magma",
+   "diverging": false
+  },
+  "lst_uhi_day_mean": {
+   "label": "LST-UHI daytime mean",
+   "group": "UHI",
+   "units": "K",
+   "cmap": "magma",
+   "diverging": false
+  },
+  "lst_uhi_night_mean": {
+   "label": "LST-UHI nighttime mean",
+   "group": "UHI",
+   "units": "K",
+   "cmap": "magma",
+   "diverging": false
+  },
+  "lst_uhi_trend": {
+   "label": "LST-UHI trend",
+   "group": "UHI",
+   "units": "K/decade",
+   "cmap": "RdBu_r",
+   "diverging": true
+  },
+  "airt_uhi_mean": {
+   "label": "AirT-UHI mean",
+   "group": "UHI",
+   "units": "K",
+   "cmap": "inferno",
+   "diverging": false
+  },
+  "airt_uhi_trend": {
+   "label": "AirT-UHI trend",
+   "group": "UHI",
+   "units": "K/decade",
+   "cmap": "RdBu_r",
+   "diverging": true
+  },
+  "ndvi_change": {
+   "label": "NDVI change (greening)",
+   "group": "Change",
+   "units": "\u0394NDVI",
+   "cmap": "BrBG",
+   "diverging": true
+  },
+  "nightlight_change": {
+   "label": "Nightlight change",
+   "group": "Change",
+   "units": "\u0394radiance",
+   "cmap": "PuOr_r",
+   "diverging": true
+  },
+  "BCR": {
+   "label": "Building coverage ratio",
+   "group": "Static",
+   "units": "",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "road_density": {
+   "label": "Road density",
+   "group": "Static",
+   "units": "",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "poi_density": {
+   "label": "POI density",
+   "group": "Static",
+   "units": "",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "nightlight": {
+   "label": "Nighttime light",
+   "group": "Static",
+   "units": "",
+   "cmap": "cividis",
+   "diverging": false
+  },
+  "ndvi": {
+   "label": "NDVI",
+   "group": "Static",
+   "units": "",
+   "cmap": "Greens",
+   "diverging": false
+  },
+  "water_ratio": {
+   "label": "Water fraction",
+   "group": "Static",
+   "units": "",
+   "cmap": "Blues",
+   "diverging": false
+  },
+  "distance_to_waterbody": {
+   "label": "Distance to water",
+   "group": "Static",
+   "units": "m",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "mean_height": {
+   "label": "Mean building height",
+   "group": "Static",
+   "units": "m",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "dem": {
+   "label": "Elevation (DEM)",
+   "group": "Static",
+   "units": "m",
+   "cmap": "cividis",
+   "diverging": false
+  },
+  "wind_exposure_proxy": {
+   "label": "Wind exposure proxy",
+   "group": "Static",
+   "units": "",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "wind_speed": {
+   "label": "10 m wind speed, mean",
+   "group": "ERA5",
+   "units": "m/s",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "tcc": {
+   "label": "Total cloud cover, mean",
+   "group": "ERA5",
+   "units": "",
+   "cmap": "Blues",
+   "diverging": false
+  },
+  "d2m": {
+   "label": "2 m dewpoint, mean",
+   "group": "ERA5",
+   "units": "K",
+   "cmap": "magma",
+   "diverging": false
+  },
+  "blh": {
+   "label": "Boundary-layer height, mean",
+   "group": "ERA5",
+   "units": "m",
+   "cmap": "viridis",
+   "diverging": false
+  },
+  "ssrd": {
+   "label": "Surface solar radiation, mean",
+   "group": "ERA5",
+   "units": "J/m\u00b2",
+   "cmap": "inferno",
+   "diverging": false
+  }
+ },
+ "cities": {
+  "cairo": {
+   "bounds": [
+    [
+     29.868,
+     30.9476
+    ],
+    [
+     30.273000000000014,
+     31.519999999999982
+    ]
+   ],
+   "layers": {
+    "lst_uhi_mean": {
+     "png": "cairo/lst_uhi_mean.png",
+     "values": "cairo/lst_uhi_mean.json",
+     "min": 0.717,
+     "max": 4.756,
+     "units": "K"
+    },
+    "lst_uhi_day_mean": {
+     "png": "cairo/lst_uhi_day_mean.png",
+     "values": "cairo/lst_uhi_day_mean.json",
+     "min": 1.141,
+     "max": 6.916,
+     "units": "K"
+    },
+    "lst_uhi_night_mean": {
+     "png": "cairo/lst_uhi_night_mean.png",
+     "values": "cairo/lst_uhi_night_mean.json",
+     "min": 0.38,
+     "max": 2.305,
+     "units": "K"
+    },
+    "lst_uhi_trend": {
+     "png": "cairo/lst_uhi_trend.png",
+     "values": "cairo/lst_uhi_trend.json",
+     "min": -0.448,
+     "max": 0.448,
+     "units": "K/decade"
+    },
+    "airt_uhi_mean": {
+     "png": "cairo/airt_uhi_mean.png",
+     "values": "cairo/airt_uhi_mean.json",
+     "min": 0.091,
+     "max": 0.553,
+     "units": "K"
+    },
+    "airt_uhi_trend": {
+     "png": "cairo/airt_uhi_trend.png",
+     "values": "cairo/airt_uhi_trend.json",
+     "min": -0.123,
+     "max": 0.123,
+     "units": "K/decade"
+    },
+    "ndvi_change": {
+     "png": "cairo/ndvi_change.png",
+     "values": "cairo/ndvi_change.json",
+     "min": -0.111,
+     "max": 0.111,
+     "units": "\u0394NDVI"
+    },
+    "nightlight_change": {
+     "png": "cairo/nightlight_change.png",
+     "values": "cairo/nightlight_change.json",
+     "min": -3.501,
+     "max": 3.501,
+     "units": "\u0394radiance"
+    },
+    "BCR": {
+     "png": "cairo/BCR.png",
+     "values": "cairo/BCR.json",
+     "min": 0.147,
+     "max": 0.9,
+     "units": ""
+    },
+    "road_density": {
+     "png": "cairo/road_density.png",
+     "values": "cairo/road_density.json",
+     "min": 0.19,
+     "max": 1.153,
+     "units": ""
+    },
+    "poi_density": {
+     "png": "cairo/poi_density.png",
+     "values": "cairo/poi_density.json",
+     "min": 0.0,
+     "max": 2.858,
+     "units": ""
+    },
+    "nightlight": {
+     "png": "cairo/nightlight.png",
+     "values": "cairo/nightlight.json",
+     "min": 9.129,
+     "max": 55.329,
+     "units": ""
+    },
+    "ndvi": {
+     "png": "cairo/ndvi.png",
+     "values": "cairo/ndvi.json",
+     "min": 0.041,
+     "max": 0.591,
+     "units": ""
+    },
+    "water_ratio": {
+     "png": "cairo/water_ratio.png",
+     "values": "cairo/water_ratio.json",
+     "min": 0.0,
+     "max": 0.125,
+     "units": ""
+    },
+    "distance_to_waterbody": {
+     "png": "cairo/distance_to_waterbody.png",
+     "values": "cairo/distance_to_waterbody.json",
+     "min": 1050.186,
+     "max": 4167.454,
+     "units": "m"
+    },
+    "mean_height": {
+     "png": "cairo/mean_height.png",
+     "values": "cairo/mean_height.json",
+     "min": 1.564,
+     "max": 24.665,
+     "units": "m"
+    },
+    "dem": {
+     "png": "cairo/dem.png",
+     "values": "cairo/dem.json",
+     "min": 43.053,
+     "max": 86.558,
+     "units": "m"
+    },
+    "wind_exposure_proxy": {
+     "png": "cairo/wind_exposure_proxy.png",
+     "values": "cairo/wind_exposure_proxy.json",
+     "min": 0.204,
+     "max": 0.809,
+     "units": ""
+    },
+    "wind_speed": {
+     "png": "cairo/wind_speed.png",
+     "values": "cairo/wind_speed.json",
+     "min": 2.805,
+     "max": 4.451,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "cairo/tcc.png",
+     "values": "cairo/tcc.json",
+     "min": 0.268,
+     "max": 0.637,
+     "units": ""
+    },
+    "d2m": {
+     "png": "cairo/d2m.png",
+     "values": "cairo/d2m.json",
+     "min": 278.778,
+     "max": 282.445,
+     "units": "K"
+    },
+    "blh": {
+     "png": "cairo/blh.png",
+     "values": "cairo/blh.json",
+     "min": 552.022,
+     "max": 963.641,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "cairo/ssrd.png",
+     "values": "cairo/ssrd.json",
+     "min": 558130.498,
+     "max": 741449.746,
+     "units": "J/m\u00b2"
+    }
+   }
+  },
+  "berlin": {
+   "bounds": [
+    [
+     52.361,
+     13.1516
+    ],
+    [
+     52.72100000000001,
+     13.648399999999986
+    ]
+   ],
+   "layers": {
+    "lst_uhi_mean": {
+     "png": "berlin/lst_uhi_mean.png",
+     "values": "berlin/lst_uhi_mean.json",
+     "min": 1.281,
+     "max": 4.572,
+     "units": "K"
+    },
+    "lst_uhi_day_mean": {
+     "png": "berlin/lst_uhi_day_mean.png",
+     "values": "berlin/lst_uhi_day_mean.json",
+     "min": 2.008,
+     "max": 6.862,
+     "units": "K"
+    },
+    "lst_uhi_night_mean": {
+     "png": "berlin/lst_uhi_night_mean.png",
+     "values": "berlin/lst_uhi_night_mean.json",
+     "min": 0.669,
+     "max": 2.287,
+     "units": "K"
+    },
+    "lst_uhi_trend": {
+     "png": "berlin/lst_uhi_trend.png",
+     "values": "berlin/lst_uhi_trend.json",
+     "min": -0.309,
+     "max": 0.309,
+     "units": "K/decade"
+    },
+    "airt_uhi_mean": {
+     "png": "berlin/airt_uhi_mean.png",
+     "values": "berlin/airt_uhi_mean.json",
+     "min": 0.161,
+     "max": 0.549,
+     "units": "K"
+    },
+    "airt_uhi_trend": {
+     "png": "berlin/airt_uhi_trend.png",
+     "values": "berlin/airt_uhi_trend.json",
+     "min": -0.09,
+     "max": 0.09,
+     "units": "K/decade"
+    },
+    "ndvi_change": {
+     "png": "berlin/ndvi_change.png",
+     "values": "berlin/ndvi_change.json",
+     "min": -0.097,
+     "max": 0.097,
+     "units": "\u0394NDVI"
+    },
+    "nightlight_change": {
+     "png": "berlin/nightlight_change.png",
+     "values": "berlin/nightlight_change.json",
+     "min": -3.322,
+     "max": 3.322,
+     "units": "\u0394radiance"
+    },
+    "BCR": {
+     "png": "berlin/BCR.png",
+     "values": "berlin/BCR.json",
+     "min": 0.242,
+     "max": 0.9,
+     "units": ""
+    },
+    "road_density": {
+     "png": "berlin/road_density.png",
+     "values": "berlin/road_density.json",
+     "min": 0.335,
+     "max": 1.144,
+     "units": ""
+    },
+    "poi_density": {
+     "png": "berlin/poi_density.png",
+     "values": "berlin/poi_density.json",
+     "min": 0.404,
+     "max": 2.831,
+     "units": ""
+    },
+    "nightlight": {
+     "png": "berlin/nightlight.png",
+     "values": "berlin/nightlight.json",
+     "min": 16.062,
+     "max": 54.893,
+     "units": ""
+    },
+    "ndvi": {
+     "png": "berlin/ndvi.png",
+     "values": "berlin/ndvi.json",
+     "min": 0.047,
+     "max": 0.509,
+     "units": ""
+    },
+    "water_ratio": {
+     "png": "berlin/water_ratio.png",
+     "values": "berlin/water_ratio.json",
+     "min": 0.0,
+     "max": 0.197,
+     "units": ""
+    },
+    "distance_to_waterbody": {
+     "png": "berlin/distance_to_waterbody.png",
+     "values": "berlin/distance_to_waterbody.json",
+     "min": 846.688,
+     "max": 4166.997,
+     "units": "m"
+    },
+    "mean_height": {
+     "png": "berlin/mean_height.png",
+     "values": "berlin/mean_height.json",
+     "min": 5.031,
+     "max": 24.446,
+     "units": "m"
+    },
+    "dem": {
+     "png": "berlin/dem.png",
+     "values": "berlin/dem.json",
+     "min": 44.571,
+     "max": 91.537,
+     "units": "m"
+    },
+    "wind_exposure_proxy": {
+     "png": "berlin/wind_exposure_proxy.png",
+     "values": "berlin/wind_exposure_proxy.json",
+     "min": 0.243,
+     "max": 0.819,
+     "units": ""
+    },
+    "wind_speed": {
+     "png": "berlin/wind_speed.png",
+     "values": "berlin/wind_speed.json",
+     "min": 2.596,
+     "max": 4.382,
+     "units": "m/s"
+    },
+    "tcc": {
+     "png": "berlin/tcc.png",
+     "values": "berlin/tcc.json",
+     "min": 0.292,
+     "max": 0.598,
+     "units": ""
+    },
+    "d2m": {
+     "png": "berlin/d2m.png",
+     "values": "berlin/d2m.json",
+     "min": 278.987,
+     "max": 282.11,
+     "units": "K"
+    },
+    "blh": {
+     "png": "berlin/blh.png",
+     "values": "berlin/blh.json",
+     "min": 556.305,
+     "max": 987.036,
+     "units": "m"
+    },
+    "ssrd": {
+     "png": "berlin/ssrd.png",
+     "values": "berlin/ssrd.json",
+     "min": 547028.884,
+     "max": 719429.991,
+     "units": "J/m\u00b2"
+    }
+   }
+  }
+ }
+}

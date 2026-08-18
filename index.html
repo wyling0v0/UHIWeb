@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UHI-Bench — Benchmarking Dual-Source Urban Heat Island Modeling</title>
+  <meta name="description" content="UHI-Bench is the first benchmark for dual-source urban heat island modeling: hourly LST-UHI and AirT-UHI co-registered with meteorology and urban morphology across 22 cities in 9 Köppen climate regimes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌆</text></svg>" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top">UHI<span>-Bench</span></a>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#explorer">Explorer</a>
+      <a href="#data">Data</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#access">Access</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <h1>UHI<span>-Bench</span></h1>
+    <p class="tagline">
+      The first benchmark for <b>dual-source urban heat island modeling</b> —
+      satellite land-surface UHI and near-surface air-temperature UHI,
+      co-registered hourly with meteorological drivers and urban morphology
+      on a 1&nbsp;km grid, across cities in diverse climate regimes.
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><b>22</b><small>cities</small></div>
+      <div class="stat"><b>9</b><small>Köppen classes</small></div>
+      <div class="stat"><b>81,755</b><small>urban pixels</small></div>
+      <div class="stat"><b>1 km · hourly</b><small>resolution</small></div>
+      <div class="stat"><b>2015–2025</b><small>coverage</small></div>
+      <div class="stat"><b>20+</b><small>baselines</small></div>
+    </div>
+    <div class="hero-cta">
+      <a class="btn primary" href="#explorer">Explore the data</a>
+      <a class="btn" href="https://github.com/wyling0v0/UHI-Bench" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://huggingface.co/datasets/WyLing0v0/uhi-bench" target="_blank" rel="noopener">Hugging Face</a>
+    </div>
+  </div>
+</header>
+
+<section id="overview">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Two heat signals, one benchmark</h2>
+      <p>Urban heat islands are observed through two physically distinct
+      signals. Most studies use only one — yet substituting one for the other
+      substantially biases the magnitude and spatial variability of human heat
+      exposure. UHI-Bench shows they are <b>related but not interchangeable</b>,
+      and supports modeling both, jointly.</p>
+    </div>
+    <div class="cards c2" style="margin-bottom:18px">
+      <div class="card">
+        <h3><em>LST-UHI</em> Land-surface temperature UHI</h3>
+        <p>Radiative surface heating from MSG/SEVIRI geostationary thermal
+        observations, downscaled 3&nbsp;km → 1&nbsp;km. Broad spatial coverage, but
+        cloud-induced gaps (~20–77% missing) that models must handle.</p>
+      </div>
+      <div class="card">
+        <h3><em>AirT-UHI</em> Near-surface air-temperature UHI</h3>
+        <p>Pedestrian-level heat exposure from DWD HOSTRADA (German cities)
+        and an ERA5-constrained residual-correction downscaler (international
+        cities). Dense and gap-free, but built from sparse station networks.</p>
+      </div>
+    </div>
+    <div class="cards c3">
+      <div class="card">
+        <span class="tag">RQ1 · Signal</span>
+        <h3>Are the two sources consistent?</h3>
+        <p>Cross-source consistency, heat-risk timing, and extreme-event
+        detection. The two sources agree on broad patterns but diverge on
+        hour-to-hour dynamics and extreme timing.</p>
+      </div>
+      <div class="card">
+        <span class="tag">RQ2 · Mechanism</span>
+        <h3>What drives urban heat?</h3>
+        <p>Imputation, forecasting, and attribution with hourly meteorology and
+        static urban morphology. Covariate utility is task- and
+        source-dependent — meteorology helps LST, morphology helps AirT.</p>
+      </div>
+      <div class="card">
+        <span class="tag">RQ3 · Transfer</span>
+        <h3>Do models transfer across climates?</h3>
+        <p>Zero-shot transfer to unseen cities. Transferability is explained by
+        overlap in UHI regimes — amplitude, variability, diurnal coverage —
+        more than by Köppen climate-label similarity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="explorer" class="alt">
+  <div class="wrap-wide">
+    <div class="sec-head">
+      <h2>Data explorer</h2>
+      <p>All benchmark cities, colored by Köppen climate class. Click a city to
+      zoom in and inspect its pixel layers: multi-year UHI means, 10-year
+      warming / cooling trends, greening change, and static &amp; meteorological
+      covariates. Click any pixel to read its values.</p>
+    </div>
+    <div class="explorer-box" style="position:relative">
+      <div style="position:relative">
+        <div id="map"></div>
+        <div id="demo-badge" class="demo-badge" hidden>DEMO DATA — synthetic preview, real layers pending export</div>
+        <div id="map-hint" class="map-hint" hidden></div>
+      </div>
+      <aside class="panel">
+        <div>
+          <h4>City</h4>
+          <select id="city-select"><option value="">— world view —</option></select>
+        </div>
+        <div>
+          <h4>Layer</h4>
+          <div id="layer-list"><p style="color:var(--text-dim)">Zoom into a city with exported layers to enable.</p></div>
+        </div>
+        <div id="legend-block" hidden>
+          <h4>Legend</h4>
+          <div class="legendbar" id="legendbar"></div>
+          <div class="legend-minmax"><span id="legend-min"></span><span id="legend-units"></span><span id="legend-max"></span></div>
+          <div style="margin-top:10px">
+            <h4>Opacity</h4>
+            <input type="range" id="opacity" min="0" max="100" value="85" />
+          </div>
+        </div>
+        <div>
+          <h4>Pixel inspector</h4>
+          <div class="readout" id="readout">Click a pixel on an active layer to read its value.</div>
+        </div>
+        <div class="city-info" id="city-info" hidden></div>
+      </aside>
+    </div>
+    <div class="map-legend" id="koppen-legend"></div>
+  </div>
+</section>
+
+<section id="data">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>How the data is built</h2>
+      <p>Multi-source observations are aligned on a standardized 1&nbsp;km hourly
+      city grid: temperature downscaling, UHI derivation against rural-ring
+      references, and spatiotemporal alignment with urban morphology and
+      meteorology.</p>
+    </div>
+    <figure class="figure">
+      <img src="assets/img/fig3_pipeline.png" alt="UHI-Bench data construction pipeline: MSG/SEVIRI LST and ERA5 air temperature are downscaled to 1 km, converted to UHI against rural references, and aligned with static morphology and meteorology." loading="lazy" />
+      <figcaption>Data construction pipeline: temperature downscaling, UHI derivation, and spatiotemporal alignment with urban morphology and meteorological variables.</figcaption>
+    </figure>
+    <div class="src-list">
+      <div class="card"><h3>LST-UHI</h3><p>EUMETSAT LSA-SAF MSG/SEVIRI land surface temperature, downscaled 3&nbsp;km → 1&nbsp;km (RF-TsHARP), referenced to rural cropland/grassland rings. Cloud-contaminated observations kept as missing.</p></div>
+      <div class="card"><h3>AirT-UHI</h3><p>German cities: DWD HOSTRADA gridded 2&nbsp;m air temperature. International cities: ERA5-constrained 1&nbsp;km residual-correction downscaling (held-out R² ≈ 0.79), labeled as pseudo-observations.</p></div>
+      <div class="card"><h3>Meteorological drivers</h3><p>ERA5-Land hourly: 10&nbsp;m wind (u10, v10), total cloud cover, 2&nbsp;m dewpoint, boundary-layer height, surface solar radiation — resampled to each 1&nbsp;km city grid.</p></div>
+      <div class="card"><h3>Urban morphology</h3><p>Building coverage &amp; height, road / POI density, nighttime light, NDVI (seasonal), water fraction, distance to water, elevation, wind exposure — from open geospatial products, annual versions where available.</p></div>
+    </div>
+    <p style="color:var(--text-dim);font-size:0.88rem;margin-top:20px">
+      Splits: training &amp; statistics <b>2015–2022</b>, evaluation
+      <b>2023–2025</b>. Four LST-only transfer cities (Tehran, Khartoum,
+      Casablanca, Istanbul) cover 2019–2025; two supplementary cities (Rome,
+      Temuco) provide station-format AirT observations.
+    </p>
+  </div>
+</section>
+
+<section id="tasks" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Tasks &amp; headline results</h2>
+      <p>Two diagnostic analyses and five task families over four model groups:
+      statistical methods, classical machine learning, deep spatiotemporal
+      models, and time-series foundation models. No model is uniformly best —
+      foundation models are consistently competitive and stable.</p>
+    </div>
+    <div class="cards c3">
+      <div class="card"><span class="tag">Task 1</span><h3>Extreme-event detection</h3><p>AirT-UHI extremes are easier to detect than LST-UHI extremes; the two sources peak at different hours of the day.</p></div>
+      <div class="card"><span class="tag">Task 2a</span><h3>LST cloud-gap imputation</h3><p>Foundation model Chronos-2 with meteorological features achieves the lowest MAE, with the largest gains in hot-arid and tropical cities.</p></div>
+      <div class="card"><span class="tag">Task 2b</span><h3>AirT sparse imputation</h3><p>Generally easier than cloud-gap filling — missing stations scatter randomly. Static urban morphology helps more than meteorology here.</p></div>
+      <div class="card"><span class="tag">Task 2c</span><h3>Dual-source forecasting</h3><p>AirT-UHI is substantially easier to predict than LST-UHI; XGBoost with both meteorology and static features is the most robust overall.</p></div>
+      <div class="card"><span class="tag">Task 2d</span><h3>Mechanism attribution</h3><p>AirT-UHI shows a stable boundary-layer–cloud–wind driver structure across all 16 cities; LST-UHI drivers are more dispersed and surface-driven.</p></div>
+      <div class="card"><span class="tag">Task 3</span><h3>Cross-climate transfer</h3><p>Climate-diverse source sets beat same-climate ones; transferability follows UHI-regime overlap, not Köppen label distance.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="access">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Access &amp; citation</h2>
+      <p>UHI-Bench is released with the full construction pipeline, standardized
+      dataloaders, and baseline implementations. The workflow extends to any
+      city in the MSG/SEVIRI full-disk domain.</p>
+    </div>
+    <div class="access-grid">
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <h3>Dataset</h3>
+          <p><a href="https://huggingface.co/datasets/WyLing0v0/uhi-bench" target="_blank" rel="noopener">huggingface.co/datasets/WyLing0v0/uhi-bench</a><br/>
+          Dual-source UHI tensors, covariates, and split definitions.</p>
+        </div>
+        <div class="card">
+          <h3>Code</h3>
+          <p><a href="https://github.com/wyling0v0/UHI-Bench" target="_blank" rel="noopener">github.com/wyling0v0/UHI-Bench</a><br/>
+          Construction pipeline, dataloaders, and 20+ baselines across 5 tasks.</p>
+        </div>
+      </div>
+      <pre class="bibtex" id="bibtex">@inproceedings{ling2027uhibench,
+  title     = {UHI-Bench: Benchmarking Dual-Source Urban Heat Island
+               Modeling Across Cities in Diverse Climate Regimes},
+  author    = {Ling, Wanyun and Liu, Chenxi and Xie, Yi and Xu, Aopu
+               and Zeng, Zhuoqi and Li, Ziyue},
+  booktitle = {Proceedings of the 33rd ACM SIGKDD Conference on
+               Knowledge Discovery and Data Mining (KDD '27)},
+  year      = {2027},
+  publisher = {ACM}
+}<button class="copy-btn" id="copy-bib">Copy</button></pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b style="color:var(--text)">UHI-Bench</b> — Wanyun Ling, Chenxi Liu, Yi Xie, Aopu Xu, Zhuoqi Zeng, Ziyue Li
+    <div class="affil">
+      Technical University of Munich · Hong Kong Institute of Science &amp; Innovation, CAS ·
+      RWTH Aachen University · Hainan Bielefeld University of Applied Sciences
+    </div>
+    <div class="affil">Map: <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a> · Basemap © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</div>
+  </div>
+</footer>
+
+<script src="assets/vendor/leaflet/leaflet.js"></script>
+<script src="assets/js/cities-data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
