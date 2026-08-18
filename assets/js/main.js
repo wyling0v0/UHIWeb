@@ -56,12 +56,26 @@ const valueCache = {};          // "city/layer" -> value grid JSON
 // Map setup
 // ---------------------------------------------------------------------------
 const map = L.map("map", {
-  zoomSnap: 0.2, worldCopyJump: true, attributionControl: true,
+  zoomSnap: 0.2, worldCopyJump: true, attributionControl: true, maxZoom: 19,
 }).setView(WORLD_VIEW.center, WORLD_VIEW.zoom);
-L.tileLayer(
-  "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-  { attribution: "© OpenStreetMap contributors © CARTO", maxZoom: 15 }
-).addTo(map);
+// Basemap choices: dark (site look), satellite (building footprints + water
+// visible when zoomed in), OSM standard (building outlines drawn at z16+).
+const basemaps = {
+  "Dark": L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    { attribution: "© OpenStreetMap contributors © CARTO", maxZoom: 19 }
+  ).addTo(map),
+  "Satellite": L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics",
+      maxZoom: 19 }
+  ),
+  "OSM": L.tileLayer(
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    { attribution: "© OpenStreetMap contributors", maxZoom: 19 }
+  ),
+};
+L.control.layers(basemaps, {}, { position: "topleft" }).addTo(map);
 
 function cityColor(c) {
   return c.role === "station" ? STATION_COLOR : (KOPPEN_COLORS[c.koppen] || "#ccc");
