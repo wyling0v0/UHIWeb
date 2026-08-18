@@ -216,3 +216,12 @@ footer .affil { margin-top: 8px; font-size: 0.78rem; }
   .nav-links { gap: 14px; }
   .nav-links a { font-size: 0.8rem; }
 }
+
+/* ---------- pixel-layer rendering ---------- */
+/* Layer PNGs are exported at native grid resolution (~70x60 px); render them
+   with nearest-neighbour so pixels stay crisp instead of bilinear-blurred
+   when the overlay is stretched over the map. */
+.pixel-layer {
+  image-rendering: pixelated;      /* Chrome / Edge / Firefox */
+  image-rendering: crisp-edges;    /* Safari fallback */
+}

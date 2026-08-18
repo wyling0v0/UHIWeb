@@ -215,7 +215,8 @@ function setLayer(slug, layerId) {
   activeLayer = layerId;
   if (overlay) map.removeLayer(overlay);
   overlay = L.imageOverlay("assets/layers/" + entry.png,
-    manifest.cities[slug].bounds, { opacity: overlayOpacity, interactive: false });
+    manifest.cities[slug].bounds,
+    { opacity: overlayOpacity, interactive: false, className: "pixel-layer" });
   overlay.addTo(map);
   // Legend
   const def = manifest.layer_defs[layerId];
