@@ -1,2 +1,6 @@
 __pycache__/
 .DS_Store
+
+# Real-layer export output (transferred via rsync, never committed)
+web_layers/
+web_layers_run.log

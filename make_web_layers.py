@@ -62,7 +62,7 @@ LAYER_DEFS = {
     "nightlight":         ("Nighttime light",          "Static", "",       "cividis",  False),
     "ndvi":               ("NDVI",                     "Static", "",       "Greens",   False),
     "water_ratio":        ("Water fraction",           "Static", "",       "Blues",    False),
-    "distance_to_waterbody": ("Distance to water",     "Static", "m",      "viridis",  False),
+    "distance_to_waterbody": ("Distance to water",     "Static", "km",     "viridis",  False),
     "mean_height":        ("Mean building height",     "Static", "m",      "viridis",  False),
     "dem":                ("Elevation (DEM)",          "Static", "m",      "cividis",  False),
     "wind_exposure_proxy": ("Wind exposure proxy",     "Static", "",       "viridis",  False),
@@ -104,6 +104,98 @@ class CityGrid:
     def rasterize(self, values):
         """[N] pixel values -> [nrows, ncols] grid, NaN where no pixel.
         Row 0 = southernmost; flipped to north-up at export time."""
+        g = np.full((self.nrows, self.ncols), np.nan, dtype=float)
+        g[self.rows, self.cols] = values
+        return g
+
+
+class MetreGrid:
+    """Regular EPSG:3034 metre grid — DE cities, whose static xy is a clean
+    ~1 km raster. (Round-tripping to WGS84 would break regularity: each row
+    drifts slightly in lon.) Bounds come from projecting the four outer
+    cell-edge corners to WGS84."""
+
+    def __init__(self, xy, pixel_ids):
+        self.pixel_ids = np.asarray(pixel_ids)
+        x = np.asarray(xy[:, 0], float)
+        y = np.asarray(xy[:, 1], float)
+        self.dx = float(np.median(np.diff(np.unique(np.round(x, 1)))))
+        self.dy = float(np.median(np.diff(np.unique(np.round(y, 1)))))
+        if not (self.dx > 100 and self.dy > 100):
+            raise ValueError(f"not a regular km-scale metre grid "
+                             f"(dx={self.dx}, dy={self.dy})")
+        self.x0, self.y0 = float(x.min()), float(y.min())
+        self.cols = np.round((x - self.x0) / self.dx).astype(int)
+        self.rows = np.round((y - self.y0) / self.dy).astype(int)
+        self.nrows = int(self.rows.max()) + 1
+        self.ncols = int(self.cols.max()) + 1
+        # Coordinate jitter (sub-cell) multiplies unique values and explodes
+        # the grid — catch that here before it produces noise PNGs.
+        if self.nrows * self.ncols > 4 * len(self.pixel_ids):
+            raise ValueError(f"degenerate metre grid {self.nrows}x{self.ncols} "
+                             f"for N={len(self.pixel_ids)}")
+        self.id_to_idx = {int(p): i for i, p in enumerate(self.pixel_ids)}
+        from pyproj import Transformer
+        tr = Transformer.from_crs(3034, 4326, always_xy=True)
+        xs = [self.x0 - self.dx / 2, self.x0 + (self.ncols - 0.5) * self.dx]
+        ys = [self.y0 - self.dy / 2, self.y0 + (self.nrows - 0.5) * self.dy]
+        lon, lat = tr.transform(np.array([xs[0], xs[0], xs[1], xs[1]]),
+                                np.array([ys[0], ys[1], ys[0], ys[1]]))
+        self._bounds = [[float(lat.min()), float(lon.min())],
+                        [float(lat.max()), float(lon.max())]]
+
+    @property
+    def bounds(self):
+        return self._bounds
+
+    def rasterize(self, values):
+        g = np.full((self.nrows, self.ncols), np.nan, dtype=float)
+        g[self.rows, self.cols] = values
+        return g
+
+
+class SnapGrid:
+    """Grid anchored on the city's clean reference lattice
+    (static_features/{city}/grid_centers.csv, a native 0.01-deg WGS84
+    raster) for cities whose projected static xy carries sub-cell jitter.
+    pixel_id sets match static_features.npz exactly, so rows/cols are taken
+    from grid_centers per pixel_id — no coordinate snapping needed."""
+
+    def __init__(self, gc_pid, gc_lat, gc_lon, pixel_ids):
+        self.pixel_ids = np.asarray(pixel_ids)
+        la = np.round(np.asarray(gc_lat, float), 4)
+        lo = np.round(np.asarray(gc_lon, float), 4)
+        self.dlat = float(np.median(np.diff(np.unique(la))))
+        self.dlon = float(np.median(np.diff(np.unique(lo))))
+        if not (1e-5 < self.dlat < 0.1 and 1e-5 < self.dlon < 0.1):
+            raise ValueError(f"irregular reference grid "
+                             f"(dlat={self.dlat}, dlon={self.dlon})")
+        self.lat0, self.lon0 = float(la.min()), float(lo.min())
+        self.nrows = int(np.round((la.max() - self.lat0) / self.dlat)) + 1
+        self.ncols = int(np.round((lo.max() - self.lon0) / self.dlon)) + 1
+        gc_row = np.round((la - self.lat0) / self.dlat).astype(int)
+        gc_col = np.round((lo - self.lon0) / self.dlon).astype(int)
+        pid_to_rc = {int(p): (int(r), int(c))
+                     for p, r, c in zip(gc_pid, gc_row, gc_col)}
+        try:
+            rcs = [pid_to_rc[int(p)] for p in self.pixel_ids]
+        except KeyError as e:
+            raise ValueError(f"pixel_id {e} missing from grid_centers.csv")
+        self.rows = np.array([r for r, _ in rcs])
+        self.cols = np.array([c for _, c in rcs])
+        if len(np.unique(self.rows.astype(np.int64) * self.ncols
+                         + self.cols)) != len(self.pixel_ids):
+            raise ValueError("pixels collide on the reference grid")
+        self.id_to_idx = {int(p): i for i, p in enumerate(self.pixel_ids)}
+        self._bounds = [[self.lat0 - self.dlat / 2, self.lon0 - self.dlon / 2],
+                        [self.lat0 + (self.nrows - 0.5) * self.dlat,
+                         self.lon0 + (self.ncols - 0.5) * self.dlon]]
+
+    @property
+    def bounds(self):
+        return self._bounds
+
+    def rasterize(self, values):
         g = np.full((self.nrows, self.ncols), np.nan, dtype=float)
         g[self.rows, self.cols] = values
         return g
@@ -189,14 +281,25 @@ def yearly_trend(per_year):
 # ----------------------------------------------------------------------------
 
 def load_static(root, city):
-    """Returns (grid, features [N, F], feat_names) in WGS84."""
-    from pyproj import Transformer
+    """Returns (grid, features [N, F], feat_names, xy).
+
+    Grid choice: DE cities have a clean ~1 km raster in EPSG:3034 metres
+    (MetreGrid); LST cities are natively defined on a 0.01-deg WGS84 grid
+    whose projected xy jitters, so they are snapped to the clean lattice in
+    lstuhi_1km_hourly/{city}/grid_centers.csv (SnapGrid)."""
     npz = np.load(root / "static_features" / city / "static_features.npz",
                   allow_pickle=True)
     xy = npz["xy"]                       # [N, 2] EPSG:3034 metres
-    tr = Transformer.from_crs(3034, 4326, always_xy=True)
-    lon, lat = tr.transform(xy[:, 0], xy[:, 1])
-    grid = CityGrid(np.asarray(lat), np.asarray(lon), npz["pixel_ids"])
+    pixel_ids = npz["pixel_ids"]
+    try:
+        grid = MetreGrid(xy, pixel_ids)
+    except ValueError as e:
+        import pandas as pd
+        gc = pd.read_csv(root / "static_features" / city / "grid_centers.csv")
+        print(f"    (metre grid rejected: {e}; "
+              f"using static_features grid_centers.csv)")
+        grid = SnapGrid(gc["pixel_id"].to_numpy(), gc["lat"].to_numpy(),
+                        gc["lon"].to_numpy(), pixel_ids)
     feat_names = [str(n) for n in npz["feat_names"]]
     return grid, npz["features"], feat_names, xy
 
@@ -313,33 +416,47 @@ def airt_layers(root, city, grid, xy, city_dir, mcity):
 
 
 def change_layers(root, city, grid, city_dir, mcity):
-    """NDVI / nightlight change from per-year features via FeatureLoader.
-    The loader API isn't pinned down here — adjust the import/call below to
-    dataset/scripts/feature_loader.py if the first run fails."""
-    try:
-        sys.path.insert(0, str(root / "scripts"))
-        from feature_loader import FeatureLoader  # noqa
-        fl = FeatureLoader(str(root))
-        per_year = {"ndvi": {}, "nightlight": {}}
-        for year in city_years(city):
-            for feat in ("ndvi", "nightlight"):
-                try:
-                    v = fl.load(city, feat, year=year)  # expected [N]
-                    per_year[feat][year] = np.asarray(v, dtype=float)
-                except Exception:
-                    pass
-        for feat, out_id in (("ndvi", "ndvi_change"),
-                             ("nightlight", "nightlight_change")):
-            ys = sorted(per_year[feat])
-            if len(ys) < 4:
-                print(f"    ! {out_id}: <4 yearly snapshots, skipped")
-                continue
-            early = np.nanmean(np.stack([per_year[feat][y] for y in ys[:3]]), 0)
-            late = np.nanmean(np.stack([per_year[feat][y] for y in ys[-3:]]), 0)
-            export_layer(grid, late - early, out_id, city_dir, mcity)
-    except Exception as e:
-        print(f"    ! Change layers unavailable ({type(e).__name__}: {e}) — "
-              "adapt change_layers() to feature_loader.py and re-run")
+    """NDVI / nightlight change from static_features/{city}/temporal_static.
+
+    Reads the per-year NPZs directly (keys: nightlight, ndvi_DJF/MAM/JJA/SON,
+    pixel_ids) instead of FeatureLoader — FeatureLoader._load_temporal falls
+    back to the nearest available year, which would duplicate snapshots and
+    bias the early/late means. Arrays are aligned to the static grid by
+    pixel_ids (temporal and static NPZs may differ in pixel count).
+    """
+    n = len(grid.pixel_ids)
+    ts_dir = root / "static_features" / city / "temporal_static"
+    if not ts_dir.exists():
+        print("    ! Change layers: no temporal_static dir")
+        return
+    per_year = {"ndvi": {}, "nightlight": {}}
+    for f in sorted(ts_dir.glob("*.npz")):
+        year = int(f.stem)
+        data = np.load(f, allow_pickle=True)
+        t_ids = data["pixel_ids"].astype(np.int64)
+        id_to_tidx = {int(p): i for i, p in enumerate(t_ids)}
+        s_to_t = np.array([id_to_tidx.get(int(p), -1)
+                           for p in grid.pixel_ids.astype(np.int64)])
+        valid = s_to_t >= 0
+        if not valid.any():
+            continue
+        align = lambda arr: np.where(valid, arr[np.clip(s_to_t, 0, None)],
+                                     np.nan).astype(float)
+        if "nightlight" in data.files:
+            per_year["nightlight"][year] = align(data["nightlight"])
+        ndvi_keys = [k for k in data.files if k.startswith("ndvi_")]
+        if ndvi_keys:
+            per_year["ndvi"][year] = np.nanmean(
+                np.stack([align(data[k]) for k in ndvi_keys]), axis=0)
+    for feat, out_id in (("ndvi", "ndvi_change"),
+                         ("nightlight", "nightlight_change")):
+        ys = sorted(per_year[feat])
+        if len(ys) < 4:
+            print(f"    ! {out_id}: <4 yearly snapshots, skipped")
+            continue
+        early = np.nanmean(np.stack([per_year[feat][y] for y in ys[:3]]), 0)
+        late = np.nanmean(np.stack([per_year[feat][y] for y in ys[-3:]]), 0)
+        export_layer(grid, late - early, out_id, city_dir, mcity)
 
 
 def era5_layers(root, city, grid, city_dir, mcity):
