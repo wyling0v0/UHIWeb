@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="assets/vendor/maplibre/maplibre-gl.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌆</text></svg>" />
 </head>
@@ -19,6 +20,7 @@
     <a class="nav-logo" href="#top">UHI<span>-Bench</span></a>
     <div class="nav-links">
       <a href="#overview">Overview</a>
+      <a href="#coverage">Coverage</a>
       <a href="#explorer">Explorer</a>
       <a href="#data">Data</a>
       <a href="#tasks">Tasks</a>
@@ -51,6 +53,31 @@
     </div>
   </div>
 </header>
+
+<section id="coverage">
+  <div class="wrap-wide">
+    <div class="sec-head">
+      <h2>Global coverage</h2>
+      <p>20 gridded cities on a 1&nbsp;km hourly grid, spanning nine Köppen
+      climate classes, plus two station-only cities. Hover or click a marker
+      to see how many years of each signal that city covers.</p>
+    </div>
+    <div class="globe-box">
+      <div id="globe"></div>
+      <div class="globe-legend">
+        <span class="chip"><i style="background:#31c48d"></i>11&nbsp;yr · LST + AirT</span>
+        <span class="chip"><i style="background:#ff6b4a"></i>7&nbsp;yr · LST only (transfer)</span>
+        <span class="chip"><i style="background:#9aa1bd"></i>station AirT only</span>
+      </div>
+      <div id="globe-info" hidden></div>
+    </div>
+    <p style="color:var(--text-dim);font-size:.8rem;margin-top:10px">
+      Drag to rotate · scroll to zoom · 81,755 urban pixels in total. Transfer
+      cities (LST only) are the held-out OOD targets of the cross-climate
+      transfer task.
+    </p>
+  </div>
+</section>
 
 <section id="overview">
   <div class="wrap">
@@ -116,6 +143,7 @@
         <div id="map"></div>
         <div id="demo-badge" class="demo-badge" hidden>DEMO DATA — synthetic preview, real layers pending export</div>
         <div id="map-hint" class="map-hint" hidden></div>
+        <div id="hover-card"></div>
       </div>
       <aside class="panel">
         <div>
@@ -245,7 +273,9 @@
 </footer>
 
 <script src="assets/vendor/leaflet/leaflet.js"></script>
+<script src="assets/vendor/maplibre/maplibre-gl.js"></script>
 <script src="assets/js/cities-data.js"></script>
+<script src="assets/js/globe.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

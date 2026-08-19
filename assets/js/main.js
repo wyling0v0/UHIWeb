@@ -227,6 +227,7 @@ function setLayer(slug, layerId) {
   const entry = manifest.cities[slug].layers[layerId];
   if (!entry) return;
   activeLayer = layerId;
+  preloadHoverGrids(slug);
   if (overlay) map.removeLayer(overlay);
   overlay = L.imageOverlay("assets/layers/" + entry.png,
     manifest.cities[slug].bounds,
@@ -289,6 +290,7 @@ function updateActiveCity() {
     hint.hidden = true;
   } else if (!eligible && activeCity) {
     activeCity = null;
+    hideHover();
     if (overlay) { map.removeLayer(overlay); overlay = null; }
     clearLayerPanel("Zoom into a city with exported layers to enable.");
     if (zoom < LAYER_MIN_ZOOM) citySelect.value = "";
@@ -313,6 +315,92 @@ document.getElementById("opacity").addEventListener("input", (e) => {
 // ---------------------------------------------------------------------------
 // Pixel inspector
 // ---------------------------------------------------------------------------
+
+// Grid hover inspector (TZE-style): highlight the hovered 1 km cell and show
+// a card with values from the key layers of the active city.
+const HOVER_LAYERS = ["lst_uhi_mean", "lst_uhi_day_mean", "lst_uhi_night_mean",
+  "lst_uhi_trend", "airt_uhi_mean", "airt_uhi_trend", "ndvi", "BCR",
+  "nightlight", "dem"];
+const hoverCard = document.getElementById("hover-card");
+let hoverCell = null;
+
+function ensureGrid(city, layerId) {
+  const key = `${city}/${layerId}`;
+  if (valueCache[key]) return;
+  const entry = manifest.cities[city].layers[layerId];
+  if (!entry) return;
+  fetch("assets/layers/" + entry.values)
+    .then((r) => r.json())
+    .then((g) => { valueCache[key] = g; })
+    .catch(() => {});
+}
+
+function preloadHoverGrids(city) {
+  if (!manifest || !manifest.cities[city]) return;
+  HOVER_LAYERS
+    .filter((l) => manifest.cities[city].layers[l])
+    .forEach((l) => ensureGrid(city, l));
+}
+
+function hideHover() {
+  hoverCard.style.display = "none";
+  if (hoverCell) { map.removeLayer(hoverCell); hoverCell = null; }
+}
+
+function updateHover(latlng, pt) {
+  if (!activeCity || !overlay || !manifest) return hideHover();
+  const [[latS, lonW], [latN, lonE]] = manifest.cities[activeCity].bounds;
+  const { lat, lng } = latlng;
+  if (lat < latS || lat > latN || lng < lonW || lng > lonE) return hideHover();
+  const anyLayer = HOVER_LAYERS.find((l) => valueCache[`${activeCity}/${l}`]);
+  if (!anyLayer) return;                       // value grids still loading
+  const grid = valueCache[`${activeCity}/${anyLayer}`];
+  const row = Math.min(grid.nrows - 1, Math.max(0,
+    Math.floor(((latN - lat) / (latN - latS)) * grid.nrows)));
+  const col = Math.min(grid.ncols - 1, Math.max(0,
+    Math.floor(((lng - lonW) / (lonE - lonW)) * grid.ncols)));
+
+  // Highlight the hovered cell (all layers of a city share one grid).
+  const dlat = (latN - latS) / grid.nrows, dlon = (lonE - lonW) / grid.ncols;
+  const south = latN - (row + 1) * dlat;
+  const west = lonW + col * dlon;
+  const bounds = [[south, west], [south + dlat, west + dlon]];
+  if (hoverCell) hoverCell.setBounds(bounds);
+  else hoverCell = L.rectangle(bounds, {
+    className: "hover-cell", color: "#ffffff", weight: 1.2,
+    dashArray: "3 3", fill: false, interactive: false,
+  }).addTo(map);
+
+  const rows = [];
+  HOVER_LAYERS.forEach((l) => {
+    if (!manifest.cities[activeCity].layers[l]) return;
+    const g = valueCache[`${activeCity}/${l}`];
+    const def = manifest.layer_defs[l];
+    if (!g || !def) return;
+    const v = (g.values[row] || [])[col];
+    rows.push(`<tr${l === activeLayer ? ' class="active"' : ""}><td>${def.label}</td>` +
+      `<td>${v === null || v === undefined ? "—" : `<b>${v}</b> ${def.units || ""}`}</td></tr>`);
+  });
+  hoverCard.innerHTML =
+    `<h5>${bySlug[activeCity].name} · r${row} c${col}</h5><table>${rows.join("")}</table>`;
+  hoverCard.style.display = "block";
+  // Keep the card inside the map container.
+  const size = map.getSize();
+  const w = hoverCard.offsetWidth, h = hoverCard.offsetHeight;
+  let x = pt.x + 18, y = pt.y + 18;
+  if (x + w > size.x - 8) x = Math.max(8, pt.x - w - 14);
+  if (y + h > size.y - 8) y = Math.max(8, pt.y - h - 14);
+  hoverCard.style.left = `${x}px`;
+  hoverCard.style.top = `${y}px`;
+}
+
+let hoverRaf = null;
+map.on("mousemove", (e) => {
+  if (hoverRaf) return;
+  hoverRaf = requestAnimationFrame(() => { hoverRaf = null; updateHover(e.latlng, e.containerPoint); });
+});
+map.on("mouseout", hideHover);
+
 map.on("click", (e) => {
   if (!activeCity || !activeLayer || !manifest) return;
   const [[latS, lonW], [latN, lonE]] = manifest.cities[activeCity].bounds;
@@ -348,7 +436,7 @@ const observer = new IntersectionObserver((entries) => {
     }
   });
 }, { rootMargin: "-40% 0px -55% 0px" });
-["overview", "explorer", "data", "tasks", "access"].forEach((id) => {
+["overview", "coverage", "explorer", "data", "tasks", "access"].forEach((id) => {
   const el = document.getElementById(id);
   if (el) observer.observe(el);
 });
