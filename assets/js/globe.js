@@ -1,8 +1,8 @@
 // Coverage globe (homepage) — MapLibre GL v5 globe projection.
-// Each gridded city is drawn as its true 1 km data footprint (union of valid
-// pixels, from assets/data/coverage.geojson): a soft halo, a lit fill and a
-// glowing edge — patches, not point markers. Hover or click a patch to fill
-// the #globe-info panel. The globe slowly auto-rotates until first interaction.
+// Each gridded city is drawn as the outline of its true 1 km data footprint
+// (union of valid pixels, from assets/data/coverage.geojson) with a
+// translucent interior. Hover or click a patch to fill the #globe-info panel.
+// The globe slowly auto-rotates until first interaction.
 (function () {
   const el = document.getElementById("globe");
   if (!el || typeof maplibregl === "undefined" || !window.UHI_CITIES) return;
@@ -14,7 +14,6 @@
     station: "Station network",
   };
   const COLORS = { dual: "#31c48d", lst: "#ff6b4a", station: "#c6cbe0" };
-  const GLOWS = { dual: "#8df0c2", lst: "#ffb09a", station: "#ffffff" };
 
   const yearsOf = (range) => {
     const m = /(\d{4}).*?(\d{4})/.exec(range || "");
@@ -114,18 +113,12 @@
     try {
       fc = await (await fetch("assets/data/coverage.geojson")).json();
     } catch (e) { return; }
-    const patches = [], halos = [], stations = [];
-    // halos[i] pairs with HALO_OPACITY[i]: index 0 = tightest ring.
-    const HALO_OPACITY = [0.5, 0.32, 0.18, 0.08];
+    const patches = [], stations = [];
     fc.features.forEach((f) => {
       const c = byslug[f.properties.slug];
       if (!c) return;
       const p = { ...propsOf(c), n_px: f.properties.n_px };
       patches.push({ type: "Feature", geometry: f.geometry, properties: p });
-      f.properties.halos.forEach((h, i) => {
-        halos.push({ type: "Feature", geometry: h,
-                     properties: { ...p, ring: i } });
-      });
     });
     window.UHI_CITIES.filter((c) => c.role === "station").forEach((c) => {
       stations.push({
@@ -137,9 +130,7 @@
 
     const color = ["match", ["get", "class"],
       "dual", COLORS.dual, "lst", COLORS.lst, COLORS.station];
-    const glow = ["match", ["get", "class"],
-      "dual", GLOWS.dual, "lst", GLOWS.lst, GLOWS.station];
-
+  
     // Station networks stay as small dots (they have no grid footprint).
     map.addSource("stations", { type: "geojson", data: { type: "FeatureCollection", features: stations } });
     map.addLayer({
@@ -151,28 +142,19 @@
       },
     });
 
-    // Gridded cities: the whole city region glows — concentric fill rings
-    // fading outward (outermost ~14 km), with a crisp edge on the footprint.
-    map.addSource("halos", { type: "geojson", data: { type: "FeatureCollection", features: halos } });
-    // Add rings largest-first so smaller ones paint on top.
-    [3, 2, 1, 0].forEach((ring) => {
-      map.addLayer({
-        id: `city-halo${ring}`, type: "fill", source: "halos",
-        filter: ["==", ["get", "ring"], ring],
-        paint: { "fill-color": color, "fill-opacity": HALO_OPACITY[ring] },
-      });
-    });
+    // Gridded cities: the true 1 km footprint as a crisp outline with a
+    // translucent interior — no glow, shape is the story.
     map.addSource("patches", { type: "geojson", data: { type: "FeatureCollection", features: patches } });
     map.addLayer({
       id: "city-patch", type: "fill", source: "patches",
-      paint: { "fill-color": color, "fill-opacity": 0.92 },
+      paint: { "fill-color": color, "fill-opacity": 0.3 },
     });
     map.addLayer({
       id: "patch-edge", type: "line", source: "patches",
       paint: {
-        "line-color": glow,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.9, 4, 2.2],
-        "line-opacity": 0.9,
+        "line-color": color,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 1.4, 4, 3],
+        "line-opacity": 1,
       },
     });
     map.addLayer({
@@ -180,11 +162,11 @@
       filter: ["==", ["get", "slug"], ""],
       paint: {
         "line-color": "#ffffff",
-        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 1.6, 4, 3.2],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 2.4, 4, 4.5],
       },
     });
 
-    const PICK = ["city-patch", "city-halo0", "city-halo1", "city-halo2", "city-halo3", "station-dot"];
+    const PICK = ["city-patch", "station-dot"];
     const pick = (e) => {
       const fs = map.queryRenderedFeatures(e.point, { layers: PICK });
       if (!fs.length) return null;

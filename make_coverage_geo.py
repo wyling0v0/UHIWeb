@@ -2,8 +2,8 @@
 """Generate assets/data/coverage.geojson from web_layers/ grids.
 
 For each gridded city, the union of valid pixels in lst_uhi_mean becomes a
-polygon footprint (the true 1 km data extent), plus a slightly buffered halo
-polygon so each city reads as a lit patch on the homepage globe at world zoom.
+polygon footprint (the true 1 km data extent) drawn as the city outline on
+the homepage globe.
 
 Run on the server next to web_layers/:
     python3 make_coverage_geo.py
@@ -64,13 +64,6 @@ def main():
             print(f"[skip] {slug}: empty mask")
             continue
         footprint = clean(unary_union(cells))
-        # Concentric halos (deg) so each city reads as a lit blob on the globe:
-        # bright core -> soft rings fading outward (~2 / 7 / 16 / 29 km).
-        halos = []
-        for buf, tol in ((0.02, 0.006), (0.06, 0.012), (0.14, 0.02), (0.26, 0.03)):
-            h = clean(footprint.buffer(buf, join_style=2), tol=tol)
-            halos.append({"type": h.geom_type,
-                          "coordinates": round_coords(mapping(h)["coordinates"])})
         n_px = len(cells)
         feats.append({
             "type": "Feature",
@@ -80,7 +73,6 @@ def main():
             },
             "properties": {
                 "slug": slug, "n_px": n_px,
-                "halos": halos,
             },
         })
         print(f"[ok] {slug}: {n_px} px, footprint {footprint.area:.3f} deg^2")
