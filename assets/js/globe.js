@@ -105,8 +105,8 @@
   };
   const hide = () => { info.hidden = true; };
   const setHover = (slug) => {
-    ["patch-hover", "halo-hover"].forEach((id) =>
-      map.getLayer(id) && map.setFilter(id, ["==", ["get", "slug"], slug || ""]));
+    if (map.getLayer("patch-hover"))
+      map.setFilter("patch-hover", ["==", ["get", "slug"], slug || ""]);
   };
 
   map.on("load", async () => {
@@ -115,12 +115,17 @@
       fc = await (await fetch("assets/data/coverage.geojson")).json();
     } catch (e) { return; }
     const patches = [], halos = [], stations = [];
+    // halos[i] pairs with HALO_OPACITY[i]: index 0 = tightest ring.
+    const HALO_OPACITY = [0.5, 0.32, 0.18, 0.08];
     fc.features.forEach((f) => {
       const c = byslug[f.properties.slug];
       if (!c) return;
       const p = { ...propsOf(c), n_px: f.properties.n_px };
       patches.push({ type: "Feature", geometry: f.geometry, properties: p });
-      halos.push({ type: "Feature", geometry: f.properties.halo, properties: p });
+      f.properties.halos.forEach((h, i) => {
+        halos.push({ type: "Feature", geometry: h,
+                     properties: { ...p, ring: i } });
+      });
     });
     window.UHI_CITIES.filter((c) => c.role === "station").forEach((c) => {
       stations.push({
@@ -146,37 +151,28 @@
       },
     });
 
-    // Gridded cities: halo -> fill -> glow edge, all from the true footprint.
+    // Gridded cities: the whole city region glows — concentric fill rings
+    // fading outward (outermost ~14 km), with a crisp edge on the footprint.
     map.addSource("halos", { type: "geojson", data: { type: "FeatureCollection", features: halos } });
-    map.addLayer({
-      id: "city-halo", type: "fill", source: "halos",
-      paint: { "fill-color": color, "fill-opacity": 0.14 },
-    });
-    map.addLayer({
-      id: "halo-hover", type: "fill", source: "halos",
-      filter: ["==", ["get", "slug"], ""],
-      paint: { "fill-color": color, "fill-opacity": 0.32 },
+    // Add rings largest-first so smaller ones paint on top.
+    [3, 2, 1, 0].forEach((ring) => {
+      map.addLayer({
+        id: `city-halo${ring}`, type: "fill", source: "halos",
+        filter: ["==", ["get", "ring"], ring],
+        paint: { "fill-color": color, "fill-opacity": HALO_OPACITY[ring] },
+      });
     });
     map.addSource("patches", { type: "geojson", data: { type: "FeatureCollection", features: patches } });
     map.addLayer({
       id: "city-patch", type: "fill", source: "patches",
-      paint: { "fill-color": color, "fill-opacity": 0.82 },
-    });
-    map.addLayer({
-      id: "patch-glow", type: "line", source: "patches",
-      paint: {
-        "line-color": glow,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 2.4, 4, 5],
-        "line-blur": ["interpolate", ["linear"], ["zoom"], 0, 2.4, 4, 5],
-        "line-opacity": 0.55,
-      },
+      paint: { "fill-color": color, "fill-opacity": 0.92 },
     });
     map.addLayer({
       id: "patch-edge", type: "line", source: "patches",
       paint: {
         "line-color": glow,
         "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.9, 4, 2.2],
-        "line-opacity": 0.95,
+        "line-opacity": 0.9,
       },
     });
     map.addLayer({
@@ -188,7 +184,7 @@
       },
     });
 
-    const PICK = ["city-patch", "city-halo", "station-dot"];
+    const PICK = ["city-patch", "city-halo0", "city-halo1", "city-halo2", "city-halo3", "station-dot"];
     const pick = (e) => {
       const fs = map.queryRenderedFeatures(e.point, { layers: PICK });
       if (!fs.length) return null;

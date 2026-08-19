@@ -63,9 +63,13 @@ def main():
             print(f"[skip] {slug}: empty mask")
             continue
         footprint = clean(unary_union(cells))
-        # Halo: buffer by ~1.5x the grid pitch so world-zoom view shows a blob.
-        pitch = max(dlat, dlon)
-        halo = clean(footprint.buffer(pitch * 1.8, join_style=2), tol=pitch / 3)
+        # Concentric halos (deg) so each city reads as a lit blob on the globe:
+        # bright core -> three soft rings fading outward (~3 / 7 / 14 km).
+        halos = []
+        for buf, tol in ((0.012, 0.004), (0.03, 0.008), (0.065, 0.012), (0.125, 0.02)):
+            h = clean(footprint.buffer(buf, join_style=2), tol=tol)
+            halos.append({"type": h.geom_type,
+                          "coordinates": round_coords(mapping(h)["coordinates"])})
         n_px = len(cells)
         feats.append({
             "type": "Feature",
@@ -75,8 +79,7 @@ def main():
             },
             "properties": {
                 "slug": slug, "n_px": n_px,
-                "halo": {"type": halo.geom_type,
-                         "coordinates": round_coords(mapping(halo)["coordinates"])},
+                "halos": halos,
             },
         })
         print(f"[ok] {slug}: {n_px} px, footprint {footprint.area:.3f} deg^2")
