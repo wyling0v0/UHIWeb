@@ -13,7 +13,8 @@ import json
 import math
 from pathlib import Path
 
-from shapely.geometry import box, mapping, shape
+from shapely.geometry import box, mapping
+from shapely.geometry.polygon import orient
 from shapely.ops import unary_union
 
 WEB = Path(__file__).parent / "web_layers"
@@ -27,11 +28,11 @@ def round_coords(coords, nd=4):
 
 
 def clean(geom, tol=0.004):
-    """Simplify + drop slivers, keep MultiPolygon structure."""
+    """Simplify + fix self-intersections + RFC 7946 winding (CCW exterior)."""
     g = geom.simplify(tol)
     if g.geom_type == "Polygon":
         g = g.buffer(0)  # fix self-intersections
-    return g
+    return orient(g)
 
 
 def main():
@@ -64,9 +65,9 @@ def main():
             continue
         footprint = clean(unary_union(cells))
         # Concentric halos (deg) so each city reads as a lit blob on the globe:
-        # bright core -> three soft rings fading outward (~3 / 7 / 14 km).
+        # bright core -> soft rings fading outward (~2 / 7 / 16 / 29 km).
         halos = []
-        for buf, tol in ((0.012, 0.004), (0.03, 0.008), (0.065, 0.012), (0.125, 0.02)):
+        for buf, tol in ((0.02, 0.006), (0.06, 0.012), (0.14, 0.02), (0.26, 0.03)):
             h = clean(footprint.buffer(buf, join_style=2), tol=tol)
             halos.append({"type": h.geom_type,
                           "coordinates": round_coords(mapping(h)["coordinates"])})
